@@ -1,0 +1,67 @@
+<div class="main-wrapper">
+  <div class="board"
+       cdkDropList
+       [cdkDropListData]="columns"
+       (cdkDropListDropped)="onColumnDrop($event)"
+       cdkDropListOrientation="horizontal">
+
+    <div cdkDrag
+         class="card-list mat-elevation-z1"
+         *ngFor="let column of columns; let columnIndex = index;">
+
+      <!-- begining of column header-->
+      <div class="row"
+           fxLayoutAlign="start center">
+        <div fxFlex="80" class="mat-h2 column-title">
+          {{column?.columnName}}
+        </div>
+        <div fxFlex="20"
+             fxLayout="row"
+             fxLayoutAlign="start center"
+             fxLayoutGap="5px"
+             cdkDragHandle>
+          <button mat-icon-button
+                  fxFlex="50"
+                  aria-label="Example icon-button with a menu">
+            <mat-icon>drag_handle</mat-icon>
+          </button>
+        </div>
+      </div>
+      <!-- end of column header-->
+
+      <!-- begining of card list -->
+      <div class="card-list-content"
+           cdkDropList
+           [id]="column.id"
+           [cdkDropListData]="column.cards"
+           [cdkDropListConnectedTo]="columnIds()"
+           (cdkDropListDropped)="onCardDrop($event)">
+
+        <app-card *ngFor="let card of column.cards"
+                  [title]="card.title"
+                  [description]="card.description"
+                  [backgroundColor]="card.backgroundColor"
+                  cdkDrag
+                  (edit)="addEditCard(card, column, true)"
+                  (delete)="deleteCard(card, column)">
+        </app-card>
+
+      </div>
+      <!-- end of card list -->
+
+      <!-- begining of footer -->
+      <div fxLayout="row" fxLayoutAlign="baseline baseline">
+          <mat-icon *ngIf="column.hasNewButton"
+                    class="add-talk"
+                    (click)="addEditCard(column, column)"
+                    class="icon">
+            add
+          </mat-icon>
+      </div>
+      <!-- end of footer -->
+    </div>
+
+  </div>
+</div>
+
+<!-- <router-outlet></router-outlet> -->
